@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MXT SOFTWARE - បញ្ជីគ្រប់គ្រងគណនី</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0f2f5; }
+        .tab-active { border-bottom: 3px solid white; }
+        .status-bar { font-size: 0.75rem; }
+        .table-container { height: calc(100vh - 250px); overflow-y: auto; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="overflow-hidden">
+
+    <!-- របារខាងលើ (Top Navigation) -->
+    <header class="bg-blue-600 text-white p-2">
+        <div class="flex items-center justify-between mb-2">
+            <h1 class="text-sm font-bold flex items-center">
+                <i class="fas fa-robot mr-2"></i> MXT SOFTWARE - FACEBOOK ACCOUNT CREATION & MANAGEMENT TOOL V24.87.5
+            </h1>
+            <div class="flex space-x-2">
+                <button class="bg-gray-700 hover:bg-gray-800 px-2 py-1 rounded text-xs"><i class="fas fa-minus"></i></button>
+                <button class="bg-gray-700 hover:bg-gray-800 px-2 py-1 rounded text-xs"><i class="fas fa-expand"></i></button>
+                <button class="bg-red-600 hover:bg-red-700 px-2 py-1 rounded text-xs"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <nav class="flex space-x-1 text-xs">
+            <button class="bg-blue-500 px-3 py-1 rounded-t flex items-center"><i class="fas fa-cog mr-1"></i> ការកំណត់ទូទៅ</button>
+            <button onclick="toggleModal('interactionModal')" class="bg-blue-400 hover:bg-blue-500 px-3 py-1 rounded-t flex items-center"><i class="fas fa-mouse-pointer mr-1"></i> កំណត់សកម្មភាព</button>
+            <button onclick="toggleModal('settingsModal')" class="bg-blue-400 hover:bg-blue-500 px-3 py-1 rounded-t flex items-center"><i class="fas fa-desktop mr-1"></i> ការកំណត់ប្រព័ន្ធ</button>
+            <button class="bg-red-500 px-3 py-1 rounded-t flex items-center"><i class="fas fa-trash mr-1"></i> គណនីត្រូវបានលុប</button>
+            <button class="bg-orange-500 px-3 py-1 rounded-t flex items-center"><i class="fas fa-dollar-sign mr-1"></i> រកចំណូល</button>
+            <button class="bg-green-500 px-3 py-1 rounded-t flex items-center"><i class="fas fa-sync mr-1"></i> អាប់ដេត</button>
+            <button class="bg-gray-500 px-3 py-1 rounded-t flex items-center"><i class="fas fa-tools mr-1"></i> ឧបករណ៍ជំនួយ</button>
+        </nav>
+    </header>
+
+    <!-- របារបញ្ជា (Control Bar) -->
+    <div class="bg-white border-b p-2 flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+            <button class="bg-green-600 text-white px-3 py-1 rounded text-xs flex items-center">
+                <i class="fas fa-play mr-1"></i> ចាប់ផ្តើមដំណើរការ
+            </button>
+            <div class="flex items-center border rounded px-2 py-1">
+                <span class="text-xs text-gray-500 mr-1">ស្វែងរក:</span>
+                <input type="text" class="outline-none text-xs w-32" placeholder="ស្វែងរកតាម UID...">
+            </div>
+            <select class="border rounded text-xs px-2 py-1 outline-none">
+                <option>គ្រប់ស្ថានភាព</option>
+                <option>Live</option>
+                <option>Die</option>
+            </select>
+        </div>
+        <div class="flex items-center space-x-1">
+            <button class="bg-green-500 text-white p-1 rounded w-8 h-8"><i class="fas fa-plus"></i></button>
+            <button class="bg-yellow-500 text-white p-1 rounded w-8 h-8"><i class="fas fa-edit"></i></button>
+            <button class="bg-red-500 text-white p-1 rounded w-8 h-8"><i class="fas fa-minus"></i></button>
+            <button class="bg-blue-500 text-white p-1 rounded w-8 h-8"><i class="fas fa-save"></i></button>
+            <button class="bg-gray-600 text-white px-3 py-1 rounded text-xs ml-4">
+                <i class="fas fa-file-import mr-1"></i> បញ្ចូលគណនី (Import)
+            </button>
+        </div>
+    </div>
+
+    <!-- តារាងទិន្នន័យ (Main Table) -->
+    <div class="table-container bg-white">
+        <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-blue-500 text-white sticky top-0">
+                <tr>
+                    <th class="p-2 border border-blue-600 w-10 text-center"><input type="checkbox"></th>
+                    <th class="p-2 border border-blue-600 w-12">No.</th>
+                    <th class="p-2 border border-blue-600">UID</th>
+                    <th class="p-2 border border-blue-600">Token</th>
+                    <th class="p-2 border border-blue-600">Cookie</th>
+                    <th class="p-2 border border-blue-600">ឈ្មោះ</th>
+                    <th class="p-2 border border-blue-600">មិត្តភក្តិ</th>
+                    <th class="p-2 border border-blue-600">ស្ថានភាព</th>
+                    <th class="p-2 border border-blue-600">ថតទុក</th>
+                </tr>
+            </thead>
+            <tbody id="accountTable">
+                <!-- ទិន្នន័យគំរូនឹងបង្ហាញនៅទីនេះ -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- របារស្ថានភាពខាងក្រោម (Footer Status) -->
+    <footer class="fixed bottom-0 w-full bg-blue-600 text-white grid grid-cols-4 md:grid-cols-8 gap-1 p-1 text-[10px] uppercase font-bold">
+        <div class="bg-green-600 p-1 text-center border-r border-blue-400">ស្ថានភាព: Activated</div>
+        <div class="bg-blue-800 p-1 text-center border-r border-blue-400">ID: MAXTASK_FAEB86...</div>
+        <div class="bg-purple-600 p-1 text-center border-r border-blue-400">អ្នកប្រើ: TRÂM VÕ</div>
+        <div class="bg-orange-600 p-1 text-center border-r border-blue-400">IP: 222.254.217.40</div>
+        <div class="bg-teal-600 p-1 text-center border-r border-blue-400">ប្រទេស: VN</div>
+        <div class="bg-yellow-600 p-1 text-center border-r border-blue-400">ផុតកំណត់: 05/11/2099</div>
+        <div class="bg-green-700 p-1 text-center border-r border-blue-400">LIVE: 19</div>
+        <div class="bg-red-700 p-1 text-center">DIE: 0</div>
+    </footer>
+
+    <!-- ផ្ទាំងការកំណត់ប្រព័ន្ធ (Settings Modal) -->
+    <div id="settingsModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded shadow-lg w-full max-w-4xl overflow-hidden">
+            <div class="bg-blue-100 p-2 flex justify-between items-center border-b border-blue-300">
+                <span class="font-bold text-sm text-blue-800">ការកំណត់ប្រព័ន្ធ (Settings)</span>
+                <button onclick="toggleModal('settingsModal')" class="text-gray-500 hover:text-red-500"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                <!-- Chrome Settings -->
+                <div class="border border-blue-300 rounded overflow-hidden">
+                    <div class="bg-blue-500 text-white p-1 text-center font-bold">Chrome Settings</div>
+                    <div class="p-3 space-y-3">
+                        <div>
+                            <p class="mb-1">Path Chromdriver:</p>
+                            <div class="flex"><input type="text" class="border flex-grow p-1 outline-none" placeholder="C:\..."><button class="bg-blue-500 text-white px-2">ជ្រើសរើស</button></div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span>Chrome Size:</span>
+                            <input type="number" class="border w-12 p-1" value="500"> x <input type="number" class="border w-12 p-1" value="300">
+                        </div>
+                        <div class="bg-blue-50 p-2 rounded">
+                            <p class="font-bold mb-1">ឈ្មោះប្រទេស:</p>
+                            <div class="grid grid-cols-3 gap-1">
+                                <label><input type="checkbox" checked> US</label>
+                                <label><input type="checkbox"> UK</label>
+                                <label><input type="checkbox"> VN</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- SMS & LDPlayer -->
+                <div class="border border-green-300 rounded overflow-hidden">
+                    <div class="bg-green-500 text-white p-1 text-center font-bold">LDPlayer & SMS Settings</div>
+                    <div class="p-3 space-y-3">
+                        <div>
+                            <p class="mb-1">LDPlayer Path:</p>
+                            <div class="flex"><input type="text" class="border flex-grow p-1" value="C:\LDPlayer\"><button class="bg-green-500 text-white px-2">ជ្រើសរើស</button></div>
+                        </div>
+                        <div class="bg-green-50 p-2 rounded">
+                            <p class="font-bold mb-1">សេវាកម្ម SMS:</p>
+                            <select class="w-full border p-1">
+                                <option>funsms.com</option>
+                                <option>vietsms.com</option>
+                                <option>globalsim.org</option>
+                            </select>
+                            <input type="text" class="w-full border mt-2 p-1" placeholder="បញ្ចូល API Key">
+                        </div>
+                    </div>
+                </div>
+                <!-- IP Settings -->
+                <div class="border border-orange-300 rounded overflow-hidden">
+                    <div class="bg-orange-500 text-white p-1 text-center font-bold">IP & Verify Settings</div>
+                    <div class="p-3 space-y-2">
+                        <div class="bg-orange-50 p-2 rounded">
+                            <p class="font-bold mb-1">ការផ្លាស់ប្តូរ IP:</p>
+                            <label class="block"><input type="radio" name="ip" checked> No Change IP</label>
+                            <label class="block"><input type="radio" name="ip"> Proxy</label>
+                            <label class="block"><input type="radio" name="ip"> HMA Software</label>
+                        </div>
+                        <div class="bg-orange-50 p-2 rounded">
+                            <p class="font-bold mb-1">Verify Settings:</p>
+                            <label class="block"><input type="checkbox"> Noverify</label>
+                            <label class="block"><input type="checkbox" checked> Veri SMS</label>
+                            <label class="block"><input type="checkbox"> Veri Gmail</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 bg-gray-100 flex justify-end space-x-2 border-t">
+                <button onclick="toggleModal('settingsModal')" class="bg-gray-400 text-white px-4 py-1 rounded">បិទ</button>
+                <button class="bg-blue-600 text-white px-4 py-1 rounded">រក្សាទុកការកំណត់</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ផ្ទាំងកំណត់សកម្មភាព (Interaction Modal) -->
+    <div id="interactionModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded shadow-lg w-full max-w-2xl overflow-hidden border-2 border-blue-400">
+            <div class="bg-blue-500 text-white p-2 flex justify-between items-center">
+                <span class="text-sm font-bold">កំណត់រចនាសម្ព័ន្ធសកម្មភាព (Interaction Config)</span>
+                <button onclick="toggleModal('interactionModal')" class="hover:text-red-200"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="p-4 grid grid-cols-2 gap-4 text-xs">
+                <div class="border p-2 space-y-2">
+                    <p class="font-bold border-b pb-1 text-blue-700">មុនពេលដំណើរការ:</p>
+                    <label class="flex items-center"><input type="checkbox" class="mr-2" checked> ប្រើប្រាស់ Profile Chrome</label>
+                    <label class="flex items-center"><input type="checkbox" class="mr-2" checked> ពិនិត្យស្ថានភាពគណនី (Check Wall)</label>
+                    <label class="flex items-center"><input type="checkbox" class="mr-2"> លុប Cache Chrome</label>
+                    
+                    <p class="font-bold border-b pb-1 mt-4 text-blue-700">ការចូលប្រព័ន្ធ (Login):</p>
+                    <div class="flex items-center space-x-2">
+                        <span>របៀបចូល:</span>
+                        <select class="border p-1 flex-grow"><option>Cookie + Password</option></select>
+                    </div>
+                </div>
+                <div class="border p-2 space-y-2">
+                    <p class="font-bold border-b pb-1 text-blue-700">សកម្មភាពបន្ទាប់ពីចូល:</p>
+                    <label class="flex items-center"><input type="checkbox" class="mr-2" checked> ទាញយក Cookie ដោយស្វ័យប្រវត្តិ</label>
+                    <label class="flex items-center"><input type="checkbox" class="mr-2"> ទាញយក Token ដោយស្វ័យប្រវត្តិ</label>
+                    <div class="grid grid-cols-2 gap-1 mt-2 bg-gray-50 p-2">
+                        <label><input type="checkbox"> ឈ្មោះ</label>
+                        <label><input type="checkbox"> ភេទ</label>
+                        <label><input type="checkbox"> ថ្ងៃខែឆ្នាំកំណើត</label>
+                        <label><input type="checkbox"> អ៊ីមែល</label>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 bg-gray-50 flex justify-end space-x-2 border-t">
+                <button onclick="toggleModal('interactionModal')" class="bg-red-500 text-white px-6 py-1 rounded">បដិសេធ</button>
+                <button class="bg-blue-600 text-white px-6 py-1 rounded">យល់ព្រម</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // បង្កើតទិន្នន័យគណនីគំរូ
+        const tableBody = document.getElementById('accountTable');
+        for (let i = 1; i <= 20; i++) {
+            const row = document.createElement('tr');
+            row.className = 'hover:bg-blue-50 border-b cursor-pointer';
+            row.innerHTML = `
+                <td class="p-2 border text-center"><input type="checkbox"></td>
+                <td class="p-2 border text-center text-gray-500">${i}</td>
+                <td class="p-2 border font-mono text-blue-700">1000${Math.floor(Math.random() * 900000000)}</td>
+                <td class="p-2 border max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap text-gray-400">EAAAA...${Math.random().toString(36).substring(7)}</td>
+                <td class="p-2 border max-w-[150px] overflow-hidden text-ellipsis whitespace-nowrap text-gray-400">datr=...; sb=...; c_user=...</td>
+                <td class="p-2 border">Account ${i}</td>
+                <td class="p-2 border text-center font-bold text-green-600">${Math.floor(Math.random() * 5000)}</td>
+                <td class="p-2 border text-center"><span class="bg-green-100 text-green-800 px-2 py-0.5 rounded-full font-bold">Live</span></td>
+                <td class="p-2 border text-blue-600">Folder_${i % 3}</td>
+            `;
+            tableBody.appendChild(row);
+        }
+
+        // មុខងារបើក/បិទ Modal
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
